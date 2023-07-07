@@ -9,6 +9,7 @@ import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 @Schema(description = "User details")
+@Table(name="users")
 @Entity
 public class UserModel {
     @Schema(description = "User Id", requiredMode = Schema.RequiredMode.REQUIRED)
