@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface CrudService<T> {
+public interface UserService<T> {
    T create(T t);
    Page<T> getall(Pageable pageable);
    Optional<T> getbyid(Long id);
    void delete(Long id);
-   T redact(Long id,T t);
+   T update(Long id, T t);
 }

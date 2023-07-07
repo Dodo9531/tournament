@@ -1,8 +1,10 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: invzbl3
-
+      author: Dodo9531
+  - include:
+      file: db.users_change_log.yaml
 name: db.changelog-master.yaml
 environment: testing
 is-enabled: false
+

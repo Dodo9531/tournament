@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements CrudService<UserModel>{
+public class UserServiceImpl implements UserService<UserModel> {
 private final UserRepository repo;
 
     public UserServiceImpl(UserRepository repo) {
@@ -37,7 +37,7 @@ private final UserRepository repo;
     }
 
     @Override
-    public UserModel redact(Long id, UserModel userModel) {
+    public UserModel update(Long id, UserModel userModel) {
         Optional<UserModel> useroptional = repo.findById(id);
         if(useroptional.isPresent())
         {
@@ -51,6 +51,8 @@ private final UserRepository repo;
             if(userModel.getGrade_letter()!=null) user.setGrade_letter(userModel.getGrade_letter());
             if(userModel.getEmail()!=null) user.setEmail(userModel.getEmail());
             if(userModel.getPassword()!=null) user.setPassword(userModel.getPassword());
+            if(userModel.getPhone()!=null) user.setPhone(userModel.getPhone());
+            if(userModel.getDate_of_birth()!=null) user.setDate_of_birth(userModel.getDate_of_birth());
             return repo.save(user);
         }
         else  return null;

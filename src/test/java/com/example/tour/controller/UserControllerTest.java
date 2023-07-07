@@ -4,7 +4,6 @@ import com.example.tour.model.UserModel;
 import com.example.tour.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.format.DateTimeFormatter;
-
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,9 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +31,7 @@ public class UserControllerTest {
             .addModule(new JavaTimeModule())
             .build();
     @Mock
-    private UserServiceImpl userService;
+    private UserServiceImpl userServiceImpl;
     @InjectMocks
     private UserController userController;
     @BeforeEach
@@ -53,7 +50,7 @@ public class UserControllerTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         Page<UserModel> page = new PageImpl<>(users, pageable, users.size());
 
-        when(userService.getall(pageable)).thenReturn(page);
+        when(userServiceImpl.getall(pageable)).thenReturn(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users"))
                 .andExpect(status().isOk())
@@ -71,7 +68,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.content[0].school").value(user1.getSchool()))
                 .andExpect(jsonPath("$.content[0].grade_number").value(user1.getGrade_number()))
                 .andExpect(jsonPath("$.content[0].grade_letter").value(user1.getGrade_letter()));
-        verify(userService, times(1)).getall(any(Pageable.class));
+        verify(userServiceImpl, times(1)).getall(any(Pageable.class));
     }
 
     @Test
@@ -79,7 +76,7 @@ public class UserControllerTest {
 
         UserModel user1 = new UserModel(1L,"Сидоров", "Илья", "Владимирович", "Ярославль", "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru","abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12));
 
-        when(userService.create(any(UserModel.class))).thenReturn(user1);
+        when(userServiceImpl.create(any(UserModel.class))).thenReturn(user1);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/create")
                         .content(objectMapper.writeValueAsString(user1))
@@ -105,7 +102,7 @@ public class UserControllerTest {
         UserModel user = new UserModel();
         user.setId(userId);
 
-        when(userService.getbyid(userId)).thenReturn(Optional.of(user));
+        when(userServiceImpl.getbyid(userId)).thenReturn(Optional.of(user));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}", userId))
                 .andExpect(status().isOk())
@@ -118,8 +115,8 @@ public class UserControllerTest {
         UserModel user1 = new UserModel(1L,"Сидоров", "Илья", "Владимирович", "Ярославль", "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru","abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12));
         UserModel user2 = new UserModel(2L,"Афанасьев", "Роберт", "Григорьевич", "Москва", "ГБОУ школа №179",8,"А","dan31022@gmail.com","abcabc","+7 223 620 43 80",LocalDate.of(2006,6,18));
 
-        when(userService.getbyid(user1.getId())).thenReturn(Optional.of(user1));
-        when(userService.redact(eq(user1.getId()), any(UserModel.class))).thenReturn(user2);
+        when(userServiceImpl.getbyid(user1.getId())).thenReturn(Optional.of(user1));
+        when(userServiceImpl.update(eq(user1.getId()), any(UserModel.class))).thenReturn(user2);
         mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", user1.getId())
                         .content(objectMapper.writeValueAsString(user1))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -142,12 +139,12 @@ public class UserControllerTest {
     public void testDeleteUser() throws Exception {
         Long userId = 1L;
 
-        when(userService.getbyid(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userServiceImpl.getbyid(userId)).thenReturn(Optional.of(new UserModel()));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/{id}", userId))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        verify(userService, times(1)).delete(userId);
+        verify(userServiceImpl, times(1)).delete(userId);
     }
 }
