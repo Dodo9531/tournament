@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: CreateTableUsers
+      id: Create_Table_Users
       author: Dodo9531
       changes:
         - createTable:
@@ -9,10 +9,12 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
                     primaryKeyName: PK_users
+
               - column:
                   name: name
                   type: varchar(255)
@@ -68,3 +70,11 @@ databaseChangeLog:
                   type: date
                   constraints:
                     nullable: false
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: Role
+                    referencedColumnNames: id
+                    referencedTableName: roles
