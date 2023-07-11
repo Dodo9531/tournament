@@ -1,3 +1,6 @@
 databaseChangeLog:
-        - include:
-            file: db/changelog/db.users_change_log_create.yaml
+       - changeSet:
+          id: dasaddas
+          author: Dodo9531
+          changes:
+           -

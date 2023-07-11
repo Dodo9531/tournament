@@ -1,6 +1,6 @@
 package com.example.tour.controller;
 
-import com.example.tour.model.UserModel;
+import com.example.tour.entity.UserEntity;
 import com.example.tour.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.format.DateTimeFormatter;
@@ -43,12 +43,14 @@ public class UserControllerTest {
     @Test
     public void testListUsers() throws Exception {
 
-        UserModel user1 = new UserModel(1L,"Сидоров", "Илья", "Владимирович", "Ярославль", "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru","abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12));
+        UserEntity user1 = new UserEntity(1L,"Сидоров", "Илья", "Владимирович", "Ярославль",
+                "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru",
+                "abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12),"ADMIN");
 
 
-        List<UserModel> users = Arrays.asList(user1);
+        List<UserEntity> users = Arrays.asList(user1);
         Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
-        Page<UserModel> page = new PageImpl<>(users, pageable, users.size());
+        Page<UserEntity> page = new PageImpl<>(users, pageable, users.size());
 
         when(userServiceImpl.getall(pageable)).thenReturn(page);
 
@@ -60,7 +62,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.content[0].name").value(user1.getName()))
                 .andExpect(jsonPath("$.content[0].surname").value(user1.getSurname()))
                 .andExpect(jsonPath("$.content[0].patronymic").value(user1.getPatronymic()))
-                .andExpect(jsonPath("$.content[0].date_of_birth").value(user1.getDate_of_birth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .andExpect(jsonPath("$.content[0].date_of_birth").value(user1.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 .andExpect(jsonPath("$.content[0].phone").value(user1.getPhone()))
                 .andExpect(jsonPath("$.content[0].email").value(user1.getEmail()))
                 .andExpect(jsonPath("$.content[0].password").value(user1.getPassword()))
@@ -74,9 +76,11 @@ public class UserControllerTest {
     @Test
     public void testCreateUser() throws Exception {
 
-        UserModel user1 = new UserModel(1L,"Сидоров", "Илья", "Владимирович", "Ярославль", "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru","abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12));
+        UserEntity user1 = new UserEntity(1L,"Сидоров", "Илья", "Владимирович", "Ярославль",
+                "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru",
+                "abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12),"ADMIN");
 
-        when(userServiceImpl.create(any(UserModel.class))).thenReturn(user1);
+        when(userServiceImpl.create(any(UserEntity.class))).thenReturn(user1);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users/create")
                         .content(objectMapper.writeValueAsString(user1))
@@ -86,7 +90,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").value(user1.getName()))
                 .andExpect(jsonPath("$.surname").value(user1.getSurname()))
                 .andExpect(jsonPath("$.patronymic").value(user1.getPatronymic()))
-                .andExpect(jsonPath("$.date_of_birth").value(user1.getDate_of_birth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .andExpect(jsonPath("$.date_of_birth").value(user1.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 .andExpect(jsonPath("$.phone").value(user1.getPhone()))
                 .andExpect(jsonPath("$.email").value(user1.getEmail()))
                 .andExpect(jsonPath("$.password").value(user1.getPassword()))
@@ -99,7 +103,7 @@ public class UserControllerTest {
     @Test
     public void testGetUserById() throws Exception {
         Long userId = 1L;
-        UserModel user = new UserModel();
+        UserEntity user = new UserEntity();
         user.setId(userId);
 
         when(userServiceImpl.getbyid(userId)).thenReturn(Optional.of(user));
@@ -112,11 +116,15 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUser() throws Exception {
-        UserModel user1 = new UserModel(1L,"Сидоров", "Илья", "Владимирович", "Ярославль", "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru","abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12));
-        UserModel user2 = new UserModel(2L,"Афанасьев", "Роберт", "Григорьевич", "Москва", "ГБОУ школа №179",8,"А","dan31022@gmail.com","abcabc","+7 223 620 43 80",LocalDate.of(2006,6,18));
+        UserEntity user1 = new UserEntity(1L,"Сидоров", "Илья", "Владимирович", "Ярославль",
+                "Средняя школа № 4 имени Н. А. Некрасова", 9,"Б","oge2782@mail.ru",
+                "abcabc","+7 734 870 49 88",LocalDate.of(2005,1,12),"ADMIN");
+        UserEntity user2 = new UserEntity(
+                2L,"Афанасьев", "Роберт", "Григорьевич", "Москва", "ГБОУ школа №179",8,"А",
+                "dan31022@gmail.com","abcabc","+7 223 620 43 80",LocalDate.of(2006,6,18),"STUDENT");
 
         when(userServiceImpl.getbyid(user1.getId())).thenReturn(Optional.of(user1));
-        when(userServiceImpl.update(eq(user1.getId()), any(UserModel.class))).thenReturn(user2);
+        when(userServiceImpl.update(eq(user1.getId()), any(UserEntity.class))).thenReturn(user2);
         mockMvc.perform(MockMvcRequestBuilders.put("/users/{id}", user1.getId())
                         .content(objectMapper.writeValueAsString(user1))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -125,7 +133,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.name").value(user2.getName()))
                 .andExpect(jsonPath("$.surname").value(user2.getSurname()))
                 .andExpect(jsonPath("$.patronymic").value(user2.getPatronymic()))
-                .andExpect(jsonPath("$.date_of_birth").value(user2.getDate_of_birth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .andExpect(jsonPath("$.date_of_birth").value(user2.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 .andExpect(jsonPath("$.phone").value(user2.getPhone()))
                 .andExpect(jsonPath("$.email").value(user2.getEmail()))
                 .andExpect(jsonPath("$.password").value(user2.getPassword()))
@@ -139,7 +147,7 @@ public class UserControllerTest {
     public void testDeleteUser() throws Exception {
         Long userId = 1L;
 
-        when(userServiceImpl.getbyid(userId)).thenReturn(Optional.of(new UserModel()));
+        when(userServiceImpl.getbyid(userId)).thenReturn(Optional.of(new UserEntity()));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/users/{id}", userId))
                 .andExpect(status().isOk())

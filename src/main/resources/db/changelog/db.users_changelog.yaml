@@ -1,0 +1,210 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_users
+      author: Dodo9531
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    autoIncrement: true
+              - column:
+                  name: username
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: patronymic
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: city
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: school
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: grade_number
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: grade_letter
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_birth
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: role
+                  type: roles
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: insert_test_data_users
+      author: Dodo9531
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                    name: username
+                    value: da1
+              - column:
+                  name: name
+                  value: Сидоров
+              - column:
+                  name: surname
+                  value: Илья
+              - column:
+                  name: patronymic
+                  value: Владимирович
+              - column:
+                  name: city
+                  value: Ярославль
+              - column:
+                  name: school
+                  value: 'Средняя школа № 4 имени Н. А. Некрасова'
+              - column:
+                  name: grade_number
+                  value: 9
+              - column:
+                  name: grade_letter
+                  value: 'Б'
+              - column:
+                  name: email
+                  value: oge2782@mail.ru
+              - column:
+                  name: password
+                  value: "$2a$10$IfuorKNfD4HFfUW93wHWVerXCY8wEAIKvGj3r5GbIuIW80.t22KnC"
+              - column:
+                  name: phone
+                  value: '+7 734 870 49 88'
+              - column:
+                  name: date_of_birth
+                  value: '12.01.2005'
+              - column:
+                  name: role
+                  value: "ADMIN"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                 name: username
+                 value: da2
+              - column:
+                  name: name
+                  value: Афанасьев
+              - column:
+                  name: surname
+                  value: Роберт
+              - column:
+                  name: patronymic
+                  value: Григорьевич
+              - column:
+                  name: city
+                  value: Москва
+              - column:
+                  name: school
+                  value: 'ГБОУ школа №179'
+              - column:
+                  name: grade_number
+                  value: 8
+              - column:
+                  name: grade_letter
+                  value: 'А'
+              - column:
+                  name: email
+                  value: dan31022@gmail.com
+              - column:
+                  name: password
+                  value: "$2a$10$IfuorKNfD4HFfUW93wHWVerXCY8wEAIKvGj3r5GbIuIW80.t22KnC"
+              - column:
+                  name: phone
+                  value: '+7 223 620 43 80'
+              - column:
+                  name: date_of_birth
+                  value: '18.06.2006'
+              - column:
+                  name: role
+                  value: "TEACHER"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: da3
+              - column:
+                  name: name
+                  value: Павлова
+              - column:
+                  name: surname
+                  value: Арина
+              - column:
+                  name: patronymic
+                  value: Дмитриевна
+              - column:
+                  name: city
+                  value: Санкт-петербург
+              - column:
+                  name: school
+                  value: 'ГБОУ школа №219'
+              - column:
+                  name: grade_number
+                  value: 10
+              - column:
+                  name: grade_letter
+                  value: 'Б'
+              - column:
+                  name: email
+                  value: neonatus@live.com
+              - column:
+                  name: password
+                  value: "$2a$10$IfuorKNfD4HFfUW93wHWVerXCY8wEAIKvGj3r5GbIuIW80.t22KnC"
+              - column:
+                  name: phone
+                  value: '+7 521 827 48 35'
+              - column:
+                  name: date_of_birth
+                  value: '23.01.2004'
+              - column:
+                  name: role
+                  value: "STUDENT"
