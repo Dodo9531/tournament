@@ -1,28 +1,26 @@
-package com.example.tour.entity;
+package com.example.tour.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.example.tour.entity.Roles;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class RegisterRequest {
+public class UserDTO {
+    @Id
+    private Long id;
     private String username;
     private String name;
     private String surname;
-    private String email;
-    private String password;
-    private String role;
     private String patronymic;
     private String city;
     private String school;
     private Integer grade_number;
     private String grade_letter;
+    @Email
+    private String email;
     private String phone;
     private LocalDate date_of_birth;
+    private Roles role;
 }

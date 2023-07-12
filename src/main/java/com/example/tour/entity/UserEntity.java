@@ -35,6 +35,8 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Schema(name = "Username", requiredMode = Schema.RequiredMode.REQUIRED)
+    private String username;
     @Schema(name = "User name", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
     @Schema(name = "User surname", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -49,7 +51,7 @@ public class UserEntity implements UserDetails {
     private Integer grade_number;
     @Schema(name = "User grade_letter", requiredMode = Schema.RequiredMode.REQUIRED)
     private String grade_letter;
-    @Schema(name = "User email", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(name = "User email")
     @Email
     private String email;
     @Schema(name = "User password", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -58,23 +60,18 @@ public class UserEntity implements UserDetails {
     private String phone;
     @Schema(name = "User date_of_birth", requiredMode = Schema.RequiredMode.REQUIRED)
     @PastOrPresent
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @JsonProperty("date_of_birth")
-    private LocalDate dateOfBirth;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date_of_birth;
     @Enumerated(EnumType.STRING)
     @Schema(name ="User role name", requiredMode = Schema.RequiredMode.REQUIRED)
     private Roles role;
 
-
+@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
 
-        @Override
-    public String getUsername() {
-        return email;
-    }
 
     @Override
     public boolean isAccountNonExpired() {

@@ -7,7 +7,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ public class JWTService {
         final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    public String getEmail(String token) {
+    public String getUsername(String token) {
         return getClaim(token,Claims::getSubject);
     }
     public String generateToken(Map<String,Object> claims, UserDetails userDetails)
@@ -40,15 +39,15 @@ public class JWTService {
     }
     public Boolean isTokenValid(UserDetails userDetails, String token)
     {
-        final String email = getEmail(token);
-        return (email.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final String username = getUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return getExpirationDate(token).before(new Date());
     }
 
-    private Date getExpirationDate(String token) {
+    public Date getExpirationDate(String token) {
         return getClaim(token,Claims::getExpiration);
     }
 
@@ -57,7 +56,7 @@ public class JWTService {
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 

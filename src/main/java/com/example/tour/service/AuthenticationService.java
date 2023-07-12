@@ -21,12 +21,13 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request)
     {
         var user = UserEntity.builder()
+                .username(request.getUsername())
                 .name(request.getName())
                 .surname(request.getSurname())
                 .patronymic(request.getPatronymic())
                 .grade_letter(request.getGrade_letter())
                 .grade_number(request.getGrade_number())
-                .dateOfBirth(request.getDateOfBirth())
+                .date_of_birth(request.getDate_of_birth())
                 .city(request.getCity())
                 .school(request.getSchool())
                 .email(request.getEmail())
@@ -34,6 +35,8 @@ public class AuthenticationService {
                 .phone(request.getPhone())
                 .role(Roles.STUDENT)
                 .build();
+        if(repo.findByUsername(user.getUsername()).isPresent())
+            throw new RuntimeException("User with that username already exist");
         if(repo.findByEmail(user.getEmail()).isPresent())
             throw new RuntimeException("User with that email already exist");
         repo.save(user);
@@ -48,10 +51,10 @@ public class AuthenticationService {
     {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
         ));
-    var user = repo.findByEmail(request.getEmail())
+    var user = repo.findByUsername(request.getUsername())
             .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse
