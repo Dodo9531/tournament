@@ -1,6 +1,4 @@
 databaseChangeLog:
-       - changeSet:
-          id: dasaddas
-          author: Dodo9531
-          changes:
-           -
+  - include:
+      file:
+        db/changelog/db.users_changelog.yaml

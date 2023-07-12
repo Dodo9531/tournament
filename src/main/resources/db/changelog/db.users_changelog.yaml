@@ -3,6 +3,11 @@ databaseChangeLog:
       id: create_table_users
       author: Dodo9531
       changes:
+        - preConditions:
+              onFail: MARK_RAN
+              not:
+                tableExists:
+                  tableName: users
         - createTable:
             tableName: users
             columns:
@@ -82,6 +87,11 @@ databaseChangeLog:
       id: insert_test_data_users
       author: Dodo9531
       changes:
+        - preConditions:
+            - onFail: MARK_RAN
+            - sqlCheck:
+                expectedResult: 0
+                sql: SELECT COUNT(*) FROM users
         - insert:
             tableName: users
             columns:
